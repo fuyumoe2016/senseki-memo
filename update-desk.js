@@ -1,5 +1,5 @@
 (()=>{"use strict";
-const APP_ID="senseki-memo",CURRENT_VERSION="1.2.2",URL="https://raw.githubusercontent.com/fuyumoe2016/fuyuno-updates/main/senseki-memo.xml",KEY="fuyumoe-update-desk-"+APP_ID,INTERVAL=86400000,MAX=32768;
+const APP_ID="senseki-memo",CURRENT_VERSION="1.2.3",URL="https://raw.githubusercontent.com/fuyumoe2016/fuyuno-updates/main/senseki-memo.xml",KEY="fuyumoe-update-desk-"+APP_ID,INTERVAL=86400000,MAX=32768;
 const $=id=>document.getElementById(id);let busy=false,lastCheck=0;
 function compare(a,b){function parts(x){if(!/^\d+(?:\.\d+){2,3}$/.test(x))throw Error("版番号が不正です");return x.split(".").map(v=>Number(v))}const x=parts(a),y=parts(b);if([...x,...y].some(n=>!Number.isSafeInteger(n)))throw Error("版番号が不正です");for(let i=0;i<Math.max(x.length,y.length);i++){if((x[i]||0)!==(y[i]||0))return (x[i]||0)>(y[i]||0)?1:-1}return 0}
 function updateStatus(message){$("updateDeskStatus").textContent=message}
