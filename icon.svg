@@ -1,1 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="metal" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#f8ffff"/><stop offset=".22" stop-color="#a0b7d3"/><stop offset=".45" stop-color="#fff"/><stop offset=".7" stop-color="#788ca7"/><stop offset="1" stop-color="#edfaff"/></linearGradient><radialGradient id="bg"><stop stop-color="#213e63"/><stop offset="1" stop-color="#070e1d"/></radialGradient></defs><rect x="8" y="8" width="496" height="496" rx="104" fill="url(#bg)" stroke="#5c86bb" stroke-width="8"/><circle cx="205" cy="257" r="111" fill="none" stroke="#101b2b" stroke-width="58"/><circle cx="205" cy="257" r="111" fill="none" stroke="url(#metal)" stroke-width="43"/><g stroke="#152337" stroke-width="65" stroke-linecap="round"><path d="M245 199L372 337"/><path d="M370 176L245 331"/></g><g stroke="url(#metal)" stroke-width="50" stroke-linecap="round"><path d="M245 199L372 337"/><path d="M370 176L245 331"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+ <radialGradient id="bg" cx=".32" cy=".18" r=".95"><stop stop-color="#315878"/><stop offset=".55" stop-color="#13243e"/><stop offset="1" stop-color="#080e1e"/></radialGradient>
+ <linearGradient id="steel" x1=".05" y1="0" x2=".95" y2="1"><stop stop-color="#607992"/><stop offset=".14" stop-color="#faffff"/><stop offset=".3" stop-color="#94adc5"/><stop offset=".47" stop-color="#fff"/><stop offset=".64" stop-color="#6d8ba5"/><stop offset=".82" stop-color="#e9f6ff"/><stop offset="1" stop-color="#55728e"/></linearGradient>
+ <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".5" stop-color="#89bfde"/><stop offset="1" stop-color="#48617b"/></linearGradient>
+ <filter id="shadow" x="-35%" y="-35%" width="170%" height="170%"><feGaussianBlur stdDeviation="10"/></filter>
+</defs>
+<rect width="512" height="512" rx="110" fill="url(#bg)"/>
+<rect x="16" y="16" width="480" height="480" rx="99" fill="none" stroke="#63809e" stroke-opacity=".43" stroke-width="2"/>
+<!-- 銀色のリング -->
+<circle cx="210" cy="255" r="113" fill="none" stroke="#030b18" stroke-opacity=".65" stroke-width="68" filter="url(#shadow)"/>
+<circle cx="210" cy="255" r="113" fill="none" stroke="#274056" stroke-width="59"/>
+<circle cx="210" cy="255" r="113" fill="none" stroke="url(#steel)" stroke-width="48"/>
+<circle cx="210" cy="255" r="90" fill="none" stroke="url(#edge)" stroke-opacity=".65" stroke-width="4"/>
+<!-- クロスの一方がリングの手前を通る -->
+<path d="M233 158 369 354" stroke="#071322" stroke-width="67" stroke-linecap="round"/>
+<path d="M233 158 369 354" stroke="url(#steel)" stroke-width="52" stroke-linecap="round"/>
+<path d="M219 158 355 354" stroke="#fff" stroke-opacity=".36" stroke-width="4" stroke-linecap="round"/>
+<!-- もう一方はリングの下へ潜り、その後手前に浮き上がる -->
+<path d="M369 155 232 356" stroke="#0b1528" stroke-width="66" stroke-linecap="round"/>
+<path d="M369 155 232 356" stroke="url(#steel)" stroke-width="51" stroke-linecap="round"/>
+<path d="M378 166 241 367" stroke="#fff" stroke-opacity=".33" stroke-width="4" stroke-linecap="round"/>
+<!-- リングの前側を部分的に重ね、知恵の輪の交差を強調 -->
+<path d="M123 182 A113 113 0 0 0 122 326" fill="none" stroke="#2e4c64" stroke-width="58"/>
+<path d="M123 182 A113 113 0 0 0 122 326" fill="none" stroke="url(#steel)" stroke-width="48"/>
+<path d="M297 327 A113 113 0 0 1 279 344" fill="none" stroke="url(#steel)" stroke-width="48"/>
+</svg>
