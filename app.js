@@ -67,5 +67,20 @@ $("backup").addEventListener("click",()=>{const blob=new Blob([JSON.stringify(db
 $("restore").addEventListener("click",()=>$("file").click());
 $("file").addEventListener("change",async ev=>{const file=ev.target.files[0];if(!file)return;try{const imported=JSON.parse(await file.text());if(!valid(imported))throw new Error("形式が違います");if(!confirm("現在の記録をバックアップで置き換えますか？ 先に現在のバックアップを保存してください。"))return;const old=clone(db),wasError=loadError;db=imported;loadError=false;if(!db.sessions)db.sessions=[];if(save()){undo.push(old);select({kind:"legacy",day:today()});notify("バックアップを復元しました")}else{db=old;loadError=wasError}}catch(e){notify("復元できません："+e.message)}finally{ev.target.value=""}});
 if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-load();$("version").textContent="v"+VERSION;render();window.addEventListener("pageshow",e=>{if(e.persisted){load();render()}});if(sessionStorage.getItem("senseki-updated")===VERSION){sessionStorage.removeItem("senseki-updated");notify("最新版に更新しました")}
+load();$("version").textContent="v"+VERSION;render();
+async function checkPublishedVersion(){
+ try{
+  const res=await fetch("./version.json?check="+Date.now(),{cache:"no-store"});
+  if(!res.ok)return;
+  const remote=(await res.json()).version;
+  if(remote===VERSION||!/^\\d+\\.\\d+\\.\\d+$/.test(remote))return;
+  if(document.getElementById("publishedUpdate"))return;
+  const bar=document.createElement("div");bar.id="publishedUpdate";bar.className="card";bar.style.borderColor="#8dd5ff";
+  const msg=document.createElement("p");msg.textContent="新しいアプリ本体 v"+remote+" が公開されています。戦績を保持して画面を更新できます。";
+  const button=document.createElement("button");button.textContent="最新版を読み込む";
+  button.onclick=async()=>{button.disabled=true;button.textContent="更新を確認しています…";try{const r=await navigator.serviceWorker.getRegistration("./");if(r)await r.update()}catch(e){console.warn(e)}location.replace("./?appVersion="+encodeURIComponent(remote)+"&refresh="+Date.now())};
+  bar.append(msg,button);document.querySelector("header").after(bar);
+ }catch(e){console.warn("Published version check",e)}
+}
+checkPublishedVersion();document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkPublishedVersion()});window.addEventListener("pageshow",e=>{if(e.persisted){load();render()}});if(sessionStorage.getItem("senseki-updated")===VERSION){sessionStorage.removeItem("senseki-updated");notify("最新版に更新しました")}
 })();
