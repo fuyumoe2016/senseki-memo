@@ -1,6 +1,6 @@
 (()=>{
 "use strict";
-const VERSION="1.2.0",KEY="fuyumoe-senseki-v1",SELECTED="fuyumoe-senseki-selected", $=id=>document.getElementById(id);
+const VERSION="1.2.1",KEY="fuyumoe-senseki-v1",SELECTED="fuyumoe-senseki-selected", $=id=>document.getElementById(id);
 const clone=v=>JSON.parse(JSON.stringify(v)),today=()=>new Date().toLocaleDateString("sv-SE");
 let db={schema:1,days:{},sessions:[]},selection={kind:"legacy",day:today()},undo=[],loadError=false;
 const notify=message=>{const el=$("toast");el.textContent=message;el.style.display="block";clearTimeout(notify.timer);notify.timer=setTimeout(()=>el.style.display="none",2600)};
