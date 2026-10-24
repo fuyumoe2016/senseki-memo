@@ -44,5 +44,5 @@ $("backup").addEventListener("click",()=>{const blob=new Blob([JSON.stringify(db
 $("restore").addEventListener("click",()=>$("file").click());
 $("file").addEventListener("change",async ev=>{const file=ev.target.files[0];if(!file)return;try{const imported=JSON.parse(await file.text());if(!valid(imported))throw new Error("形式が違います");if(!confirm("現在の記録をバックアップで置き換えますか？ 先に現在のバックアップを保存してください。"))return;const old=clone(db),wasError=loadError;db=imported;loadError=false;if(!db.sessions)db.sessions=[];if(save()){undo.push(old);select({kind:"legacy",day:today()});notify("バックアップを復元しました")}else{db=old;loadError=wasError}}catch(e){notify("復元できません："+e.message)}finally{ev.target.value=""}});
 if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-load();$("version").textContent="v"+VERSION;render();if(sessionStorage.getItem("senseki-updated")===VERSION){sessionStorage.removeItem("senseki-updated");notify("最新版に更新しました")}check();document.addEventListener("visibilitychange",()=>{if(!document.hidden)check()});
+load();$("version").textContent="v"+VERSION;render();if(sessionStorage.getItem("senseki-updated")===VERSION){sessionStorage.removeItem("senseki-updated");notify("最新版に更新しました")}
 })();
