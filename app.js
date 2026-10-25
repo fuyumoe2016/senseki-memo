@@ -73,7 +73,7 @@ async function checkPublishedVersion(){
   const res=await fetch("./version.json?check="+Date.now(),{cache:"no-store"});
   if(!res.ok)return;
   const remote=(await res.json()).version;
-  if(remote===VERSION||!/^\\d+\\.\\d+\\.\\d+$/.test(remote))return;
+  if(remote===VERSION||!/^\d+\.\d+\.\d+$/.test(remote))return;
   if(document.getElementById("publishedUpdate"))return;
   const bar=document.createElement("div");bar.id="publishedUpdate";bar.className="card";bar.style.borderColor="#8dd5ff";
   const msg=document.createElement("p");msg.textContent="新しいアプリ本体 v"+remote+" が公開されています。戦績を保持して画面を更新できます。";
