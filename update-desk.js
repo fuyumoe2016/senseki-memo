@@ -1,5 +1,5 @@
 (()=>{"use strict";
-const APP_ID="senseki-memo",CURRENT_VERSION="1.2.4",URL="https://raw.githubusercontent.com/fuyumoe2016/fuyuno-updates/main/senseki-memo.xml",KEY="fuyumoe-update-desk-"+APP_ID,INTERVAL=86400000,MAX=32768;
+const APP_ID="senseki-memo",CURRENT_VERSION="1.2.5",URL="https://raw.githubusercontent.com/fuyumoe2016/fuyuno-updates/main/senseki-memo.xml",KEY="fuyumoe-update-desk-"+APP_ID,INTERVAL=86400000,MAX=32768;
 const $=id=>document.getElementById(id);let busy=false,lastCheck=0;
 function compare(a,b){function parts(x){if(!/^\d+(?:\.\d+){2,3}$/.test(x))throw Error("版番号が不正です");return x.split(".").map(v=>Number(v))}const x=parts(a),y=parts(b);if([...x,...y].some(n=>!Number.isSafeInteger(n)))throw Error("版番号が不正です");for(let i=0;i<Math.max(x.length,y.length);i++){if((x[i]||0)!==(y[i]||0))return (x[i]||0)>(y[i]||0)?1:-1}return 0}
 function updateStatus(message){$("updateDeskStatus").textContent=message}
@@ -13,3 +13,4 @@ async function retrieve(){const controller=new AbortController(),timer=setTimeou
 async function check(manual=false){if(busy)return; if(!manual&&Date.now()-lastCheck<INTERVAL)return;busy=true;lastCheck=Date.now();$("updateDeskCheck").disabled=true;if(manual)updateStatus("更新情報を確認中…");try{const r=await retrieve();if(r.status==="absent"){if(manual)updateStatus("更新情報はまだ公開されていません");return}if(compare(r.version,CURRENT_VERSION)<=0){if(manual){hide();updateStatus("現在のバージョンは最新版です")}return}const seen=getSeen(),already=seen&&compare(seen,r.version)>=0;if(manual||!already){show(r.version,r.page,r.notes);setSeen(r.version);updateStatus("新しいバージョンがあります")}else updateStatus("前回お知らせした更新があります（手動確認で再表示）")}catch(e){if(manual)updateStatus("更新情報を確認できませんでした。通信・配信設定をご確認ください");console.warn("Update Desk:",e)}finally{busy=false;$("updateDeskCheck").disabled=false}}
 $("updateDeskCheck").addEventListener("click",()=>check(true));$("updateDeskClose").addEventListener("click",hide);document.addEventListener("visibilitychange",()=>{if(!document.hidden)check()});window.addEventListener("focus",()=>check());setInterval(()=>{if(!document.hidden)check()},60000);check();
 })();
+

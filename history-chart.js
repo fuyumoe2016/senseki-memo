@@ -2,12 +2,15 @@
 "use strict";
 const host=document.getElementById("monthlyChart");if(!host)return;
 const daily=new Map();let readFailed=false;
+function loadDaily(){daily.clear();readFailed=false;
 try{
  const db=JSON.parse(localStorage.getItem("fuyumoe-senseki-v1")||"{}");
  const add=(date,rows)=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Array.isArray(rows))return;const parsed=new Date(date+"T12:00:00");if(!Number.isFinite(+parsed)||parsed.getFullYear()+"-"+String(parsed.getMonth()+1).padStart(2,"0")+"-"+String(parsed.getDate()).padStart(2,"0")!==date)return;for(const row of rows){if(!row||!["win","loss"].includes(row.result))continue;const day=daily.get(date)||{wins:0,total:0};day.total++;if(row.result==="win")day.wins++;daily.set(date,day)}};
  for(const [date,rows] of Object.entries(db.days||{}))add(date,rows);
  for(const s of Array.isArray(db.sessions)?db.sessions:[])if(s)add(s.date,s.rows);
 }catch{readFailed=true}
+}
+loadDaily();
 const now=new Date(),monthOf=date=>{const [y,m]=date.split("-").map(Number);return y*12+m-1},current=now.getFullYear()*12+now.getMonth(),months=[...daily.keys()].map(monthOf),latest=Math.max(current,...months),earliest=Math.min(latest,...months);
 let shown=latest;const $=id=>host.querySelector("#"+id);
 host.innerHTML='<div class="mc-nav"><button type="button" id="mc-prev" aria-label="前の月">◀</button><strong id="mc-month"></strong><button type="button" id="mc-next" aria-label="次の月">▶</button><span>日別勝率</span></div><div class="mc-plot"><div class="mc-grid" aria-hidden="true"><div><span>100%</span></div><div><span>50%</span></div><div><span>0%</span></div></div><div id="mc-bars" class="mc-bars" aria-label="日ごとの勝率"></div><div class="mc-dates" id="mc-dates" aria-hidden="true"></div><div id="mc-popup" class="mc-popup" role="status" aria-live="polite" hidden></div><div id="mc-empty" class="mc-empty" hidden></div></div>';
@@ -28,5 +31,7 @@ function render(){
 $("mc-prev").onclick=()=>{if(shown>earliest){shown--;render()}};$("mc-next").onclick=()=>{if(shown<latest){shown++;render()}};
 document.addEventListener("pointerdown",event=>{if(!popup.hidden&&!popup.contains(event.target)&&!event.target.closest(".mc-day:not(:disabled)"))close()});
 document.addEventListener("keydown",event=>{if(event.key==="Escape")close()});
+document.addEventListener("senseki-history-changed",()=>{loadDaily();render()});
 render();
 })();
+
